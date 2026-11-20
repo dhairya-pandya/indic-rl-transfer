@@ -1,0 +1,51 @@
+{
+  "args": {
+    "model": "Qwen/Qwen2.5-1.5B-Instruct",
+    "adapter": null,
+    "langs": [
+      "en",
+      "bn",
+      "te",
+      "sw"
+    ],
+    "limit": 250,
+    "seeds": [
+      0
+    ],
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "max_lora_rank": 64,
+    "gpu_mem": 0.9,
+    "dtype": "half",
+    "print_samples": 3,
+    "out": "/kaggle/working/outputs/eval/base_Qwen2.5-1.5B-Instruct"
+  },
+  "seeds": {
+    "0": {
+      "bn": {
+        "n": 250,
+        "acc": 0.144,
+        "en_reasoning_share": 0.0,
+        "native_script_share": 1.0
+      },
+      "en": {
+        "n": 250,
+        "acc": 0.76,
+        "en_reasoning_share": 1.0,
+        "native_script_share": null
+      },
+      "sw": {
+        "n": 250,
+        "acc": 0.056,
+        "en_reasoning_share": 0.988,
+        "native_script_share": null
+      },
+      "te": {
+        "n": 250,
+        "acc": 0.032,
+        "en_reasoning_share": 0.072,
+        "native_script_share": 0.928
+      }
+    }
+  }
+}
