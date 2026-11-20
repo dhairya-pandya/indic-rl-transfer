@@ -11,8 +11,8 @@ import subprocess
 import sys
 
 ARM = "en"
-STEPS = 300
-TRAIN_TIMEOUT = "10h"
+STEPS = 250
+TRAIN_TIMEOUT = "10h20m"
 os.environ.update(HF_HOME="/tmp/hf", PIP_CACHE_DIR="/tmp/pip", TMPDIR="/tmp", CUDA_VISIBLE_DEVICES="0")
 REPO, OUT, PY = "/tmp/repo", "/kaggle/working/outputs", sys.executable
 RUN = f"/tmp/runs/full_{ARM}"

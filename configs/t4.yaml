@@ -1,9 +1,9 @@
-# T4 (16 GB, no bf16): 3B model in 4-bit (QLoRA), shorter completions, groups of 6.
+# T4 (16 GB, no bf16): 3B model in 4-bit (QLoRA), 768-token completions (Indic scripts need ~1.5x the tokens of English), groups of 6.
 # Apply after the arm config.
 model: unsloth/Qwen2.5-3B-Instruct
 load_in_4bit: true
 vllm_mem: 0.5
-max_completion_len: 512
+max_completion_len: 768
 num_generations: 6
 per_device_batch: 6
 grad_accum: 4

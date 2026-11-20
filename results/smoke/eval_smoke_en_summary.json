@@ -1,0 +1,51 @@
+{
+  "args": {
+    "model": "Qwen/Qwen2.5-3B-Instruct",
+    "adapter": "/kaggle/working/outputs/smoke_en/final_adapter",
+    "langs": [
+      "en",
+      "bn",
+      "te",
+      "sw"
+    ],
+    "limit": 32,
+    "seeds": [
+      0
+    ],
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "max_lora_rank": 64,
+    "gpu_mem": 0.85,
+    "dtype": "half",
+    "print_samples": 0,
+    "out": "/kaggle/working/outputs/eval_smoke_en"
+  },
+  "seeds": {
+    "0": {
+      "bn": {
+        "n": 32,
+        "acc": 0.375,
+        "en_reasoning_share": 0.0,
+        "native_script_share": 1.0
+      },
+      "en": {
+        "n": 32,
+        "acc": 0.71875,
+        "en_reasoning_share": 1.0,
+        "native_script_share": null
+      },
+      "sw": {
+        "n": 32,
+        "acc": 0.09375,
+        "en_reasoning_share": 1.0,
+        "native_script_share": null
+      },
+      "te": {
+        "n": 32,
+        "acc": 0.15625,
+        "en_reasoning_share": 0.0,
+        "native_script_share": 1.0
+      }
+    }
+  }
+}
