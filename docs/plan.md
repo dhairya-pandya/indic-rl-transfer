@@ -1,6 +1,6 @@
 # indic-rl-transfer Implementation Plan
 
-> **For agentic workers:** Use subagent-driven or task-by-task execution. Steps use checkbox (`- [ ]`) syntax.
+> Execute task by task. Steps use checkbox (`- [ ]`) syntax.
 
 **Goal:** Reward functions, MGSM eval harness, GRPO training script and a Saturn Cloud smoke-test plan for the EN-vs-Indic RL transfer study.
 
@@ -17,7 +17,7 @@
 - Public/synthetic data only: GSM8K (`openai/gsm8k`), MGSM (`juletxara/mgsm`), `ai4bharat/indic-gsm8k` (bn/te/en columns) minus the 250 MGSM items, for both arms.
 - Eval languages: en, bn, te, sw. Train languages Arm B: bn, te.
 - Arms A and B: identical model, steps, group size, prompt count, reward.
-- Public repo: no AI-assistant mentions; commit messages plain, no Co-Authored-By lines.
+- Public repo: plain commit messages.
 
 ## Review Focus
 
