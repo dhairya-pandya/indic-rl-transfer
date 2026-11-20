@@ -14,7 +14,7 @@
 
 - Free Saturn Cloud hours only; no paid instance types. Nothing launches without the user's OK.
 - HF account: `dhairyapandya` (currently logged in). Tokens only from env / `hf auth login`; never printed, logged or committed.
-- Public/synthetic data only: GSM8K (`openai/gsm8k`), MGSM (`juletxara/mgsm`), MGSM8KInstruct (`Mathoctopus/MGSM8KInstruct_Parallel`) for bn/te train.
+- Public/synthetic data only: GSM8K (`openai/gsm8k`), MGSM (`juletxara/mgsm`), `ai4bharat/indic-gsm8k` (bn/te/en columns) minus the 250 MGSM items, for both arms.
 - Eval languages: en, bn, te, sw. Train languages Arm B: bn, te.
 - Arms A and B: identical model, steps, group size, prompt count, reward.
 - Public repo: no AI-assistant mentions; commit messages plain, no Co-Authored-By lines.
@@ -100,7 +100,7 @@ def test_consistency_en_zero(): assert consistency_reward(["hello"], ["en"]) == 
 - Produces:
   - `SYSTEM_PROMPT = "Solve the problem step by step in the same language as the question. End with '#### <number>'."`
   - `build_prompt(question: str) -> list[dict]` (chat messages: system + user)
-  - `load_train(arm: str, n: int, seed: int = 0) -> datasets.Dataset` (`arm` in `{"en", "indic"}`; columns `prompt`, `answer`, `lang`; `indic` = n/2 bn + n/2 te from MGSM8KInstruct, shuffled)
+  - `load_train(arm: str, n: int, seed: int = 0) -> datasets.Dataset` (`arm` in `{"en", "indic"}`; columns `prompt`, `answer`, `lang`; `en` = English questions; `indic` = each problem in bn or te, seeded 50/50; `n<=1069`)
   - `load_mgsm(lang: str, limit: int | None = None) -> datasets.Dataset` (columns `prompt`, `answer`, `lang`, `question`)
   - `assert_no_overlap(train: Dataset, test_questions: list[str]) -> None` (raises `ValueError` on any exact-match normalised question)
 

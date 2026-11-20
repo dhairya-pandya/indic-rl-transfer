@@ -31,16 +31,20 @@ Headline target: "English RL recovers X% of the Bengali/Telugu gain of direct In
 - **Step 0, baseline (~1 GPU h):** eval Qwen2.5-1.5B-Instruct and Gemma 3 1B-it on MGSM
   en/bn/te/sw (250 each, greedy). Pick model with clearly non-zero bn/te accuracy.
   If both near floor, step up to a ~3B model and re-size runs.
-- **Arm A (EN):** GRPO + LoRA on GSM8K train, English prompts.
-- **Arm B (Indic):** GRPO + LoRA on public machine-translated GSM8K (bn, te; hi if a clean
-  public source exists), same steps, same group size, same prompt count.
+- **Train pool:** `ai4bharat/indic-gsm8k` (Apache-2.0; GSM8K test translated to Indic languages)
+  minus the 250 problems that MGSM was built from = 1,069 problems. Both arms see the *same
+  problems*; only the language differs.
+- **Arm A (EN):** GRPO + LoRA on the 1,069 problems in English.
+- **Arm B (Indic):** same 1,069 problems, each shown in Bengali or Telugu (seeded 50/50 split);
+  same steps, group size, prompt count.
 - **Optional Arm C:** Arm B + language-consistency reward, only if hours remain.
 - **Rewards:** exact-match on final number (parsed, Indic/Arabic digits normalised);
   small format reward; consistency reward (Arm C) = fraction of reasoning in question language.
 - **Eval:** MGSM test (en, bn, te, sw; sw = non-Indic low-resource control), 3 sampling seeds.
   Metrics: accuracy per language; share of reasoning traces in English (fastText/GlotLID);
   transfer ratio = (A_gain on bn/te) / (B_gain on bn/te).
-- **Contamination check:** confirm MGSM test items are not in the translated train set.
+- **Contamination check:** drop MGSM items by normalised English-question match (exactly 250
+  removed), then assert no overlap at load time.
 - **Stack:** TRL GRPOTrainer + Unsloth, vLLM generation if GPU allows. ~300-500 steps/run.
 - **Smoke test first:** 20 steps, 32 eval items, to measure step time and size full runs.
 
