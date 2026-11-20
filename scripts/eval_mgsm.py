@@ -24,6 +24,8 @@ def parse_args():
     p.add_argument("--max-tokens", type=int, default=1024)
     p.add_argument("--max-lora-rank", type=int, default=64)
     p.add_argument("--gpu-mem", type=float, default=0.85)
+    p.add_argument("--dtype", default="auto", help="use half on T4 (no bf16)")
+    p.add_argument("--print-samples", type=int, default=0, help="print N completions per language to stdout")
     p.add_argument("--out", required=True)
     return p.parse_args()
 
@@ -39,6 +41,7 @@ def main():
         max_lora_rank=args.max_lora_rank,
         gpu_memory_utilization=args.gpu_mem,
         max_model_len=2048,
+        dtype=args.dtype,
         seed=0,
     )
     lora = LoRARequest("adapter", 1, args.adapter) if args.adapter else None
@@ -61,8 +64,11 @@ def main():
         for r in rows:
             f.write(json.dumps(r, ensure_ascii=False) + "\n")
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
-    for seed, s in summary["seeds"].items():
-        print(seed, {l: round(v["acc"], 3) for l, v in s.items()})
+    print("SUMMARY_JSON " + json.dumps(summary["seeds"], ensure_ascii=False))
+    if args.print_samples:
+        for lang in args.langs:
+            for r in [r for r in rows if r["lang"] == lang][: args.print_samples]:
+                print("SAMPLE_JSON " + json.dumps(r, ensure_ascii=False))
 
 
 if __name__ == "__main__":
