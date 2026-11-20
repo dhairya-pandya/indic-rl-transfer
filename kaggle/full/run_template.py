@@ -26,7 +26,7 @@ def sh(cmd, check=True):
 
 sh("nvidia-smi --query-gpu=name,memory.total --format=csv && df -h /tmp /kaggle/working | tail -2")
 sh(f"git clone -q --depth 1 https://github.com/dhairya-pandya/indic-rl-transfer.git {REPO}")
-sh(f"{PY} -m pip install -q unsloth vllm")
+sh(f"{PY} -m pip install -q unsloth==2026.11.7 vllm==0.26.0")  # versions the en/indic arms resolved to
 sh(f"cd {REPO} && {PY} -m pip install -q -e . pytest && {PY} -m pytest -q -m 'not net'")
 sh(f"{PY} -m pip freeze > {OUT}/pip_freeze.txt")
 
