@@ -47,8 +47,19 @@ python scripts/eval_mgsm.py --model <model> --adapter outputs/runs/smoke_en/fina
 Pass: no OOM, mean correctness reward > 0 in `log_history.json`, `step_times.json` written,
 adapter loads in the eval script.
 
-## Stage 3: sizing
+## Stage 3: sizing (Kaggle budget: 30 T4 hours total, hard cap 26 h used)
 
-Full-run hours per arm = 400 x mean sec/step / 3600. Proceed to full runs only if
-2 arms + 3-seed evals of base and both adapters fit in 60 GPU h (keeps more than half of the
-150 free hours spare for the optional consistency-reward arm and reruns).
+Runs on Kaggle (account `dhairyaankurpandya`, T4, 12 h max per session). Budget:
+
+| Item | Hours |
+|------|-------|
+| Stage 1 baseline (2 models) | ~1.5 |
+| Stage 2 smoke (2 arms x 20 steps + quick eval) | ~1 |
+| Full runs, 2 arms | <= 2 x 8 |
+| Final evals (base + 2 adapters, 250 x 4 langs, greedy + 1 sampled seed) | ~3 |
+| Headroom (reruns, crashes) | >= 4 |
+
+Steps per arm = min(400, floor(8 h x 3600 / sec_per_step)), with 250 as the floor. Below 250 steps,
+cut `max_completion_len` to 384 before cutting steps further. The consistency-reward arm (Arm C)
+is dropped unless both arms finish well under budget. Each full run saves an adapter every 50
+steps to `/kaggle/working`, so a session timeout loses at most 50 steps.

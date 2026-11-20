@@ -11,5 +11,5 @@ grad_accum: 4
 temperature: 1.0
 beta: 0.0
 use_consistency: false
-save_every: 100
+save_every: 50
 seed: 0

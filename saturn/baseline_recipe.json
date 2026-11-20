@@ -1,0 +1,25 @@
+{
+  "type": "job",
+  "schema_version": "2025.10.01",
+  "spec": {
+    "name": "indic-rl-baseline",
+    "owner": "DP/dhairyapandya2006",
+    "description": "MGSM baseline eval (en/bn/te/sw) for Qwen2.5 1.5B and 3B on T4",
+    "image": "saturncloud/saturn-python-pytorch:2025.05.01",
+    "instance_type": "g4dnxlarge",
+    "command": "bash saturn/baseline_job.sh",
+    "working_directory": "/home/jovyan/workspace/indic-rl-transfer",
+    "git_repositories": [
+      {
+        "url": "https://github.com/dhairya-pandya/indic-rl-transfer.git",
+        "path": "/home/jovyan/workspace/indic-rl-transfer",
+        "public": true,
+        "reference": "main",
+        "reference_type": "branch",
+        "on_restart": "reclone"
+      }
+    ],
+    "use_spot_instance": false,
+    "backoff_limit": 1
+  }
+}
