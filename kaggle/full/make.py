@@ -1,4 +1,4 @@
-"""Write kaggle/full/<arm>/{run.py,kernel-metadata.json}. Usage: python kaggle/full/make.py STEPS TIMEOUT"""
+"""Write kaggle/full/<arm>/{run.py,kernel-metadata.json}. Usage: python kaggle/full/make.py STEPS TIMEOUT_SECONDS (GNU timeout rejects compound units like 10h20m)"""
 import json
 import pathlib
 import sys
