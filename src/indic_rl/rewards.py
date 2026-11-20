@@ -9,7 +9,8 @@ for start in (0x09E6, 0x0C66, 0x0966):
         _DIGIT_MAP[chr(start + i)] = str(i)
 _DIGIT_TABLE = str.maketrans(_DIGIT_MAP)
 
-_NUM = r"-?\d[\d,]*(?:\.\d+)?"
+# Minus only when not glued to a preceding word/digit ("3-4" is a range); commas only as thousands groups.
+_NUM = r"(?<![\w])-?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?"
 
 
 def normalize_digits(s: str) -> str:

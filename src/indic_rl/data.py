@@ -34,7 +34,10 @@ def _train_pool() -> Dataset:
     pool = load_dataset(TRAIN_SOURCE, split="test")
     mgsm_en = load_dataset(MGSM_SOURCE, "en", split="test")["question"]
     test = {_norm(q) for q in mgsm_en}
+    before = len(pool)
     pool = pool.filter(lambda r: _norm(r["question"]) not in test)
+    if before - len(pool) != len(mgsm_en):
+        raise ValueError(f"expected to drop {len(mgsm_en)} MGSM items, dropped {before - len(pool)}; leakage filter unreliable")
     pool = pool.map(lambda r: {"question_en": r["question"], "gold": str(extract_answer(r["answer"].split("####")[-1]))})
     assert_no_overlap(pool, mgsm_en)
     return pool

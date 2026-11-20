@@ -35,3 +35,15 @@ def test_chat_style_completion():
 
 def test_negative_and_hash_precedence():
     assert extract_answer("3 apples ... #### -4") == -4
+
+
+def test_hyphen_range_not_negative():
+    assert extract_answer("between 3-4 apples") == 4
+
+
+def test_comma_list_not_merged():
+    assert extract_answer("pick 2,3") == 3
+
+
+def test_thousands_still_ok():
+    assert extract_answer("#### 1,000.") == 1000

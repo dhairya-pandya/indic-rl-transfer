@@ -25,7 +25,7 @@ def parse_args():
     return p.parse_args()
 
 
-def load_model(cfg, use_unsloth):
+def load_model(cfg, use_unsloth, bf16):
     max_len = cfg["max_prompt_len"] + cfg["max_completion_len"]
     if use_unsloth:
         from unsloth import FastLanguageModel
@@ -44,7 +44,7 @@ def load_model(cfg, use_unsloth):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tok = AutoTokenizer.from_pretrained(cfg["model"])
-    model = AutoModelForCausalLM.from_pretrained(cfg["model"], torch_dtype="auto")
+    model = AutoModelForCausalLM.from_pretrained(cfg["model"], torch_dtype="bfloat16" if bf16 else "float16")
     peft_cfg = LoraConfig(r=cfg["lora_r"], lora_alpha=cfg["lora_r"], target_modules="all-linear", task_type="CAUSAL_LM")
     return model, tok, peft_cfg
 
@@ -80,10 +80,15 @@ def main():
     import torch
     from trl import GRPOConfig, GRPOTrainer
 
-    bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()  # False on T4
+    if not torch.cuda.is_available():
+        raise SystemExit("GRPO training needs a CUDA GPU")
+    bf16 = torch.cuda.is_bf16_supported()  # False on T4
+    gen_batch = cfg["per_device_batch"] * cfg["grad_accum"]
+    if gen_batch % cfg["num_generations"]:
+        raise SystemExit(f"per_device_batch*grad_accum={gen_batch} must be divisible by num_generations")
 
     train = load_train(cfg["arm"], cfg["n_train"], seed=cfg["seed"])
-    model, tok, peft_cfg = load_model(cfg, use_unsloth)
+    model, tok, peft_cfg = load_model(cfg, use_unsloth, bf16)
 
     rewards = [correctness_reward, format_reward]
     if cfg["use_consistency"]:
