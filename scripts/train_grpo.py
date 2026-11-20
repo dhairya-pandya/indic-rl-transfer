@@ -44,7 +44,7 @@ def load_model(cfg, use_unsloth):
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
     tok = AutoTokenizer.from_pretrained(cfg["model"])
-    model = AutoModelForCausalLM.from_pretrained(cfg["model"], torch_dtype="bfloat16")
+    model = AutoModelForCausalLM.from_pretrained(cfg["model"], torch_dtype="auto")
     peft_cfg = LoraConfig(r=cfg["lora_r"], lora_alpha=cfg["lora_r"], target_modules="all-linear", task_type="CAUSAL_LM")
     return model, tok, peft_cfg
 
@@ -77,7 +77,10 @@ def main():
     use_unsloth = not args.no_unsloth
     if use_unsloth:
         import unsloth  # noqa: F401  (must import before trl)
+    import torch
     from trl import GRPOConfig, GRPOTrainer
+
+    bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()  # False on T4
 
     train = load_train(cfg["arm"], cfg["n_train"], seed=cfg["seed"])
     model, tok, peft_cfg = load_model(cfg, use_unsloth)
@@ -98,7 +101,8 @@ def main():
         temperature=cfg["temperature"],
         beta=cfg["beta"],
         use_vllm=use_unsloth,  # unsloth fast_inference supplies vLLM in-process
-        bf16=True,
+        bf16=bf16,
+        fp16=not bf16,
         logging_steps=1,
         save_steps=cfg["save_every"],
         save_total_limit=2,

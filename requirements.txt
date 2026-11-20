@@ -1,0 +1,9 @@
+# GPU environment (Saturn Cloud). Unsloth pins compatible torch/transformers/trl;
+# after the smoke run succeeds, `pip freeze > requirements.lock` and commit it.
+unsloth
+vllm
+trl
+peft
+datasets
+pyyaml>=6.0
+pytest>=8
