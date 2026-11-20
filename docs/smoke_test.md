@@ -63,3 +63,9 @@ Steps per arm = min(400, floor(8 h x 3600 / sec_per_step)), with 250 as the floo
 cut `max_completion_len` to 384 before cutting steps further. The consistency-reward arm (Arm C)
 is dropped unless both arms finish well under budget. Each full run saves an adapter every 50
 steps to `/kaggle/working`, so a session timeout loses at most 50 steps.
+
+## Kaggle storage
+
+Big throwaway files go to `/tmp`: HF cache (`HF_HOME=/tmp/hf`), pip cache, repo clone, and
+intermediate GRPO checkpoints. Only eval outputs and final/latest adapters go to `/kaggle/working`
+(kept after the session, ~20 GB limit).
