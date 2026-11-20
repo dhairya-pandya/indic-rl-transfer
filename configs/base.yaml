@@ -1,0 +1,15 @@
+model: unsloth/Qwen2.5-1.5B-Instruct
+lora_r: 32
+lr: 5.0e-6
+num_generations: 8
+max_prompt_len: 384
+max_completion_len: 768
+steps: 400
+n_train: null        # null = all 1,069 problems
+per_device_batch: 8  # completions per device step; must be divisible by num_generations
+grad_accum: 4
+temperature: 1.0
+beta: 0.0
+use_consistency: false
+save_every: 100
+seed: 0
