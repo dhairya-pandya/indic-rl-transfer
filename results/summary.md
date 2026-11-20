@@ -26,3 +26,10 @@
 | Qwen2.5-3B-Instruct | 100.0 | 0.0 | 0.0 | 100.0 |
 | + GRPO on English | 100.0 | 0.0 | 0.0 | 100.0 |
 | + GRPO on Bengali/Telugu | 100.0 | 76.0 | 55.2 | 100.0 |
+
+## Accuracy by reasoning language (%; n items; base accuracy on the same items)
+
+| Model | bn, English reasoning | bn, Bengali reasoning | te, English reasoning | te, Telugu reasoning |
+|---|---|---|---|---|
+| + GRPO on English | - | 39.2 (n=250; base 36.4) | - | 8.8 (n=250; base 10.4) |
+| + GRPO on Bengali/Telugu | 57.4 (n=190; base 36.3) | 38.3 (n=60; base 36.7) | 14.5 (n=138; base 11.6) | 6.2 (n=112; base 8.9) |

@@ -124,5 +124,73 @@
       "hi": null,
       "denominator_positive_share": 0.5375
     }
+  },
+  "accuracy_by_reasoning_language": {
+    "base": {
+      "bn_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "bn_native": {
+        "n": 250,
+        "acc": 36.4,
+        "base_acc_same_items": 36.4
+      },
+      "te_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "te_native": {
+        "n": 250,
+        "acc": 10.4,
+        "base_acc_same_items": 10.4
+      }
+    },
+    "en": {
+      "bn_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "bn_native": {
+        "n": 250,
+        "acc": 39.2,
+        "base_acc_same_items": 36.4
+      },
+      "te_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "te_native": {
+        "n": 250,
+        "acc": 8.8,
+        "base_acc_same_items": 10.4
+      }
+    },
+    "indic": {
+      "bn_english": {
+        "n": 190,
+        "acc": 57.4,
+        "base_acc_same_items": 36.3
+      },
+      "bn_native": {
+        "n": 60,
+        "acc": 38.3,
+        "base_acc_same_items": 36.7
+      },
+      "te_english": {
+        "n": 138,
+        "acc": 14.5,
+        "base_acc_same_items": 11.6
+      },
+      "te_native": {
+        "n": 112,
+        "acc": 6.2,
+        "base_acc_same_items": 8.9
+      }
+    }
   }
 }
