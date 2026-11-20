@@ -31,8 +31,8 @@ def load_model(cfg, use_unsloth, bf16):
         from unsloth import FastLanguageModel
 
         model, tok = FastLanguageModel.from_pretrained(
-            cfg["model"], max_seq_length=max_len, load_in_4bit=False,
-            fast_inference=True, max_lora_rank=cfg["lora_r"], gpu_memory_utilization=0.6,
+            cfg["model"], max_seq_length=max_len, load_in_4bit=cfg.get("load_in_4bit", False),
+            fast_inference=True, max_lora_rank=cfg["lora_r"], gpu_memory_utilization=cfg.get("vllm_mem", 0.6),
         )
         model = FastLanguageModel.get_peft_model(
             model, r=cfg["lora_r"], lora_alpha=cfg["lora_r"],

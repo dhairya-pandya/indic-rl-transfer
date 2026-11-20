@@ -1,4 +1,8 @@
-# T4 (16 GB, no bf16): shorter completions, smaller groups. Apply after the arm config.
+# T4 (16 GB, no bf16): 3B model in 4-bit (QLoRA), shorter completions, groups of 6.
+# Apply after the arm config.
+model: unsloth/Qwen2.5-3B-Instruct
+load_in_4bit: true
+vllm_mem: 0.5
 max_completion_len: 512
 num_generations: 6
 per_device_batch: 6
