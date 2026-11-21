@@ -17,6 +17,12 @@
       "bn": 52.8,
       "te": 10.8,
       "sw": 13.6
+    },
+    "cons": {
+      "en": 82.0,
+      "bn": 40.0,
+      "te": 10.8,
+      "sw": 10.0
     }
   },
   "english_reasoning_share": {
@@ -36,6 +42,12 @@
       "en": 100.0,
       "bn": 76.0,
       "te": 55.2,
+      "sw": 100.0
+    },
+    "cons": {
+      "en": 100.0,
+      "bn": 0.0,
+      "te": 0.0,
       "sw": 100.0
     }
   },
@@ -101,6 +113,38 @@
         "gain": 0.084,
         "lo": 0.044,
         "hi": 0.126,
+        "n": 500
+      }
+    },
+    "cons": {
+      "en": {
+        "gain": -0.036,
+        "lo": -0.076,
+        "hi": 0.0,
+        "n": 250
+      },
+      "bn": {
+        "gain": 0.036,
+        "lo": -0.028,
+        "hi": 0.1,
+        "n": 250
+      },
+      "te": {
+        "gain": 0.004,
+        "lo": -0.044,
+        "hi": 0.052,
+        "n": 250
+      },
+      "sw": {
+        "gain": 0.008,
+        "lo": -0.032,
+        "hi": 0.052,
+        "n": 250
+      },
+      "bn+te": {
+        "gain": 0.02,
+        "lo": -0.018,
+        "hi": 0.06,
         "n": 500
       }
     }
@@ -190,6 +234,28 @@
         "n": 112,
         "acc": 6.2,
         "base_acc_same_items": 8.9
+      }
+    },
+    "cons": {
+      "bn_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "bn_native": {
+        "n": 250,
+        "acc": 40.0,
+        "base_acc_same_items": 36.4
+      },
+      "te_english": {
+        "n": 0,
+        "acc": null,
+        "base_acc_same_items": null
+      },
+      "te_native": {
+        "n": 250,
+        "acc": 10.8,
+        "base_acc_same_items": 10.4
       }
     }
   }

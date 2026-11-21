@@ -17,7 +17,6 @@ alembic==1.20.1
 altair==5.5.0
 annotated-doc==0.0.5
 annotated-types==0.8.0
-anthropic==2.11.0
 anyio==4.15.1
 anywidget==0.9.21
 apache-tvm-ffi==0.1.10

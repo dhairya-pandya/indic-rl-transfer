@@ -5,6 +5,7 @@
 | Qwen2.5-3B-Instruct | 85.6 | 36.4 | 10.4 | 9.2 |
 | + GRPO on English | 84.8 | 39.2 | 8.8 | 6.8 |
 | + GRPO on Bengali/Telugu | 86.0 | 52.8 | 10.8 | 13.6 |
+| + GRPO on Bengali/Telugu + consistency reward | 82.0 | 40.0 | 10.8 | 10.0 |
 
 ## Gain over base (points, 95% paired bootstrap CI)
 
@@ -12,6 +13,7 @@
 |---|---|---|---|---|---|
 | + GRPO on English | -0.8 [-4.4, +3.2] | +2.8 [-2.8, +8.4] | -1.6 [-5.6, +2.0] | -2.4 [-6.0, +1.2] | +0.6 [-2.6, +3.8] |
 | + GRPO on Bengali/Telugu | +0.4 [-2.8, +3.6] | +16.4 [+9.6, +23.2] | +0.4 [-4.0, +4.4] | +4.4 [+0.0, +8.8] | +8.4 [+4.4, +12.6] |
+| + GRPO on Bengali/Telugu + consistency reward | -3.6 [-7.6, +0.0] | +3.6 [-2.8, +10.0] | +0.4 [-4.4, +5.2] | +0.8 [-3.2, +5.2] | +2.0 [-1.8, +6.0] |
 
 ## Transfer ratio (English-arm gain / Indic-arm gain)
 
@@ -26,6 +28,7 @@
 | Qwen2.5-3B-Instruct | 100.0 | 0.0 | 0.0 | 100.0 |
 | + GRPO on English | 100.0 | 0.0 | 0.0 | 100.0 |
 | + GRPO on Bengali/Telugu | 100.0 | 76.0 | 55.2 | 100.0 |
+| + GRPO on Bengali/Telugu + consistency reward | 100.0 | 0.0 | 0.0 | 100.0 |
 
 ## Accuracy by reasoning language (%; n items; base accuracy on the same items)
 
@@ -33,3 +36,4 @@
 |---|---|---|---|---|
 | + GRPO on English | - | 39.2 (n=250; base 36.4) | - | 8.8 (n=250; base 10.4) |
 | + GRPO on Bengali/Telugu | 57.4 (n=190; base 36.3) | 38.3 (n=60; base 36.7) | 14.5 (n=138; base 11.6) | 6.2 (n=112; base 8.9) |
+| + GRPO on Bengali/Telugu + consistency reward | - | 40.0 (n=250; base 36.4) | - | 10.8 (n=250; base 10.4) |

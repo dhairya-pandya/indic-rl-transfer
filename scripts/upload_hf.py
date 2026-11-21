@@ -7,12 +7,24 @@ Example:
 """
 
 import argparse
+import json
 from pathlib import Path
 
 from huggingface_hub import HfApi
 
 BASE = "Qwen/Qwen2.5-3B-Instruct"
 GH = "https://github.com/dhairya-pandya/indic-rl-transfer"
+
+ARMS = [  # (arm, name, prompt description, language tags, extra reward text, one-line finding)
+    ("en", "English arm", "in English", "en", "",
+     "Finding: English RL gave no significant change on Bengali or Telugu MGSM."),
+    ("indic", "Bengali/Telugu arm", "each shown in Bengali or Telugu (50/50)", "bn, te", "",
+     "Finding: +16.4 points on Bengali MGSM, mostly because the model learned to reason in English "
+     "(76% of Bengali answers) instead of Bengali."),
+    ("indic_consistency", "Bengali/Telugu + native-script reward", "each shown in Bengali or Telugu (50/50)",
+     "bn, te", ", plus 0.3 x the share of letters in the question's script",
+     "Finding: reasoning stays in Bengali/Telugu, and the Bengali gain falls to +3.6 points (not significant)."),
+]
 
 CARD = """---
 base_model: {base}
@@ -27,25 +39,31 @@ datasets: [ai4bharat/indic-gsm8k, juletxara/mgsm]
 
 LoRA adapter (r=32, 4-bit QLoRA training on a single T4) trained with GRPO for {steps} steps on
 1,069 GSM8K problems {arm_desc}. Rewards: exact final-answer match (1.0) and a `#### <number>`
-format bonus (0.2).
+format bonus (0.2){extra_reward}.
 
 Part of the [indic-rl-transfer]({gh}) study: does RL on English math transfer to Bengali and
-Telugu, compared with RL on those languages directly? Both adapters see the same problems,
-steps and hyperparameters; only the prompt language differs.
+Telugu, compared with RL on those languages directly? All three adapters see the same problems,
+steps and hyperparameters; they differ only in prompt language and, for one, a native-script
+reward.
 
-## MGSM accuracy (%, greedy, 250 items per language)
+{finding}
+
+## MGSM accuracy (%, greedy, 250 items per language; adapter applied to the fp16 base model)
 
 {table}
 
-Full eval outputs: [dhairyapandya/indic-rl-transfer-evals](https://huggingface.co/datasets/{user}/indic-rl-transfer-evals).
+Full eval outputs: [{user}/indic-rl-transfer-evals](https://huggingface.co/datasets/{user}/indic-rl-transfer-evals).
+Report: {gh}/blob/main/docs/report.md
 
 ## Use
 
 ```python
+from huggingface_hub import snapshot_download
 from vllm import LLM
 from vllm.lora.request import LoRARequest
 llm = LLM("{base}", enable_lora=True, max_lora_rank=64)
-llm.chat([[{{"role": "user", "content": "..."}}]], lora_request=LoRARequest("a", 1, "{repo}"))
+lora = LoRARequest("adapter", 1, snapshot_download("{repo}"))
+llm.chat([[{{"role": "user", "content": "..."}}]], lora_request=lora)
 ```
 
 Training data excludes the 250 GSM8K test problems MGSM is built from (checked at load time).
@@ -61,8 +79,9 @@ tags: [mgsm, evaluation, grpo]
 
 # indic-rl-transfer eval outputs
 
-Raw MGSM completions (greedy, 250 items x en/bn/te/sw) for Qwen2.5-3B-Instruct and two GRPO LoRA
-adapters (English-trained and Bengali/Telugu-trained), plus baseline runs and training logs.
+Raw MGSM completions (greedy, 250 items x en/bn/te/sw) for Qwen2.5-3B-Instruct and three GRPO LoRA
+adapters (English-trained, Bengali/Telugu-trained, and Bengali/Telugu-trained with a native-script
+reward), plus baseline runs, training logs and the summary tables.
 Each `completions.jsonl` row: `seed, lang, question, answer, completion`.
 
 Code and report: {gh}
@@ -78,17 +97,15 @@ def main():
     api = HfApi()
     summary_md = (a.results / "summary.md").read_text().split("## Gain")[0].split("\n", 2)[2].strip()
 
-    for arm, arm_name, desc, langs in [
-        ("en", "English arm", "in English", "en"),
-        ("indic", "Bengali/Telugu arm", "each shown in Bengali or Telugu (50/50)", "bn, te"),
-    ]:
-        repo = f"{a.user}/indic-rl-transfer-qwen2.5-3b-grpo-{arm}"
-        adapter = a.adapters / f"full_{arm}" / "outputs" / f"full_{arm}" / "adapter"
-        cfg = __import__("json").loads((a.results / f"full_{arm}" / "config.json").read_text())
+    for arm, arm_name, desc, langs, extra, finding in ARMS:
+        repo = f"{a.user}/indic-rl-transfer-qwen2.5-3b-grpo-{arm.replace('_', '-')}"
+        adapter = next(a.adapters.glob(f"full_*/outputs/full_{arm}/adapter"))
+        cfg = json.loads((a.results / f"full_{arm}" / "config.json").read_text())
         api.create_repo(repo, repo_type="model", exist_ok=True)
-        api.upload_folder(repo_id=repo, folder_path=str(adapter), commit_message="Add LoRA adapter")
+        api.upload_folder(repo_id=repo, folder_path=str(adapter), commit_message="Add LoRA adapter",
+                          ignore_patterns=["training_args.bin", "README.md"])
         card = CARD.format(base=BASE, lang_tags=langs, arm_name=arm_name, arm_desc=desc, steps=cfg["steps"],
-                           gh=GH, table=summary_md, user=a.user, repo=repo)
+                           gh=GH, table=summary_md, user=a.user, repo=repo, extra_reward=extra, finding=finding)
         api.upload_file(path_or_fileobj=card.encode(), path_in_repo="README.md", repo_id=repo, commit_message="Add model card")
         print("uploaded", repo)
 

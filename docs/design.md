@@ -10,7 +10,7 @@ Headline target: "English RL recovers X% of the Bengali/Telugu gain of direct In
 ## Goals
 - Two matched GRPO runs, same model, same steps, same reward.
 - Per-language MGSM accuracy before/after, plus reasoning-language drift.
-- Short technical report, released LoRA adapters and raw eval outputs on HF (`codingpanda`).
+- Short technical report, released LoRA adapters and raw eval outputs on HF (released under `dhairyapandya`).
 
 ## Non-goals / anti-goals
 - No full grid of models/mixes. No claims beyond the measured languages.
@@ -19,6 +19,7 @@ Headline target: "English RL recovers X% of the Bengali/Telugu gain of direct In
 
 ## Constraints
 - Saturn Cloud free hours only (~150 GPU h); no paid credits. GPU type to confirm on Saturn.
+  As run: the Saturn org had 0 free hours, so everything ran on 30 free Kaggle T4 hours (18.4 used).
 - Public/synthetic data only. Tokens via env vars / `hf auth login`, never committed.
 - Public repo: no AI-tool mentions, plain commits.
 
